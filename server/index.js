@@ -21,7 +21,7 @@ async function startServer() {
     });
 
     process.on("unhandledRejection", (err) => {
-      console.error("Unhandled Rejection 💥", err);
+      console.error("Unhandled Rejection", err);
       server.close(() => {
         process.exit(1);
       });
