@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "https://quizziee-app.netlify.app/auth",
+        path: "auth",
         element: (
           <AuthProvider>
             <Auth />
