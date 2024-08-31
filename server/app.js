@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
   res.status(200).json("Welcome to the quiz server API");
 });
 
-\app.use("/api/auth", authRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/quizzes", quizRouter);
 app.use("/api/polls", pollRouter);
 app.use("/api/users", userRouter);
