@@ -12,7 +12,7 @@ process.on("uncaughtException", (err) => {
 async function startServer() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to DB ✅");
+    console.log("Connected");
 
     const port = process.env.PORT || 5000; 
 
