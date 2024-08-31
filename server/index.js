@@ -5,7 +5,7 @@ const app = require("./app");
 dotenv.config();
 
 process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception 💥", err);
+  console.error("Uncaught Exception ", err);
   process.exit(1);
 });
 
