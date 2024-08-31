@@ -1,0 +1,77 @@
+.container {
+  background-color: var(--neutral-color);
+  padding: 1rem;
+  margin: 2rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 10rem; /* Large gap for larger screens */
+  justify-content: center;
+  padding-bottom: 22px;
+}
+
+.tab:focus {
+  outline: none;
+}
+
+.container > div {
+  margin-bottom: 3rem;
+}
+
+.image {
+  text-align: center;
+  height: 2rem;
+}
+
+.image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* For screens 768px and above */
+@media (min-width: 768px) {
+  .container {
+    margin: 4rem;
+  }
+
+  .image {
+    height: 3rem;
+  }
+
+  .form {
+    max-width: 80%;
+  }
+}
+
+/* For screens 1280px and above */
+@media (min-width: 1280px) {
+  .container {
+    margin: 4rem 6rem;
+    box-shadow: 0 3.2px 7.2px rgb(0 0 0 / 8%), 0 -3.2px 7.2px rgb(0 0 0 / 8%),
+      3.2px 0 7.2px rgb(0 0 0 / 8%), -3.2px 0 7.2px rgb(0 0 0 / 8%);
+  }
+
+  .tabs {
+    gap: 10rem; /* Maintain large gap on large screens */
+    justify-content: center;
+    padding-bottom: 22px;
+  }
+
+  .form {
+    max-width: 50%;
+  }
+
+  .form > div {
+    gap: 2rem;
+  }
+}
+
+/* For screens smaller than 768px */
+@media (max-width: 767px) {
+  .tabs {
+    gap: 1rem; /* Reduced gap on small screens */
+  }
+}
