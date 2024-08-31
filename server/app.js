@@ -8,7 +8,7 @@ const globalErrorHandler = require("./src/controllers/errorController");
 
 const app = express();
 
-const allowedOrigins = ["https://quizziee-app.netlify.app/", "https://quizzie-api-zexm.onrender.com"];
+const allowedOrigins = ["https://quizziee-app.netlify.app/", "https://quizzie-api-zexm.onrender.com/"];
 
 const corsOptions = {
   origin: (origin, callback) => {
