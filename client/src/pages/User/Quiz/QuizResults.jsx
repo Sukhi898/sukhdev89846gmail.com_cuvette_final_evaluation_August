@@ -13,7 +13,7 @@ export default function QuizResults() {
 
   return (
     <div>
-      <h1>Congrats quiz is complete</h1>
+      <h1>Congrats Quiz is complete</h1>
       <div className="image">
         <img src={trophy} alt="" />
       </div>
