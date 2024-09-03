@@ -9,9 +9,25 @@
   /* margin-top: 2rem; */
   grid-template-columns: 1fr 1fr;
 }
+.option2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.option2 > div {
+  flex: 1;
+  border-radius: 0.5rem;
+  background-color: var(--base-color);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 30px;
+}
 
 @media (max-width: 767px) {
   .options {
+    grid-template-columns: auto;
+  }
+  .option2 {
     grid-template-columns: auto;
   }
 }
