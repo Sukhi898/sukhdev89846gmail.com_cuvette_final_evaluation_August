@@ -19,7 +19,6 @@ const defaultQuiz = (name, type, actions, defaultData) => {
   if (actions === "update") {
     return defaultData;
   }
-
   return {
     category: type,
     name: name,
@@ -50,17 +49,16 @@ export default function QuizCreator({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [createdQuiz, setCreatedQuiz] = useState(null);
+  const [createdPoll, setCreatedPoll] = useState(null); // New state for poll
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { toggleModal } = useContext(ModalContext);
 
   const getQuestion = (state, id) => {
     const question = state.questions.find((question) => question._id === id);
-
     if (!question) {
       throw new Error("Question not found");
     }
-
     return question;
   };
 
@@ -79,11 +77,9 @@ export default function QuizCreator({
       options: [{ text: "" }, { text: "" }],
       answer: 0,
     };
-
     setQuiz((draft) => {
       draft.questions.push(defaultQuestion);
     });
-
     setSelectedTabIndex(quiz.questions.length);
   };
 
@@ -91,7 +87,6 @@ export default function QuizCreator({
     setQuiz((draft) => {
       draft.questions = draft.questions.filter((q) => q._id !== id);
     });
-
     setSelectedTabIndex(index - 1);
   };
 
@@ -116,16 +111,13 @@ export default function QuizCreator({
       const question = getQuestion(draft, id);
       question.optionsType = type;
     });
-
     resetOptions(id, type);
   };
 
   const addOption = (id, type) => {
     setQuiz((draft) => {
       const question = getQuestion(draft, id);
-
       let option;
-
       if (type === "text") {
         option = { text: "" };
       } else if (type === "image") {
@@ -133,7 +125,6 @@ export default function QuizCreator({
       } else {
         option = { text: "", image: "" };
       }
-
       question.options.push(option);
     });
   };
@@ -168,7 +159,6 @@ export default function QuizCreator({
   const createOrUpdateQuiz = useCallback(async () => {
     setIsProcessing(true);
     let updatedQuiz = { ...quiz };
-
     if (actions !== "update") {
       const updatedQuestions = quiz.questions.map((el) => ({
         question: el.question || "",
@@ -176,22 +166,17 @@ export default function QuizCreator({
         options: el.options || [],
         answer: el.answer || 0,
       }));
-
       updatedQuiz.questions = updatedQuestions;
     }
-
     const resource = quiz.category === "quiz" ? "api/quizzes/" : "api/polls/";
     let url = `${import.meta.env.VITE_BACKEND_URL}${resource}`;
-
     if (actions === "update") {
       url = `${import.meta.env.VITE_BACKEND_URL}${resource}${quiz._id}`;
     }
-
     try {
       if (!user) {
         throw new Error("User not found");
       }
-
       const res = await fetch(url, {
         method: actions === "update" ? "PATCH" : "POST",
         body: JSON.stringify(updatedQuiz),
@@ -200,32 +185,37 @@ export default function QuizCreator({
           "Content-Type": "application/json",
         },
       });
-
       if (!res.ok) {
         const errJSON = await res.json();
         console.log(errJSON);
         throw new Error(errJSON.message);
       }
-
       if (actions !== "update") {
         const resJson = await res.json();
-        setCreatedQuiz(resJson.data.quiz);
+        console.log(resJson);
+        if (quiz.category === "quiz") {
+          setCreatedQuiz(resJson.data.quiz);
+        } else {
+          setCreatedPoll(resJson.data.poll); // Use the poll data for polls
+        }
+        setShowResult(true);
       }
-
-      toast.success("Successfully created quiz");
+      const message =
+        quizType === "quiz"
+          ? "Successfully created quiz"
+          : "Successfully created poll";
+      toast.success(message);
     } catch (error) {
       toast.error(error.message);
     } finally {
       setIsProcessing(false);
-
       if (actions === "update") {
         toggleEditModal();
         navigate(0);
-      } else {
-        setShowResult(true);
       }
     }
-  }, [quiz, user, actions, navigate, toggleEditModal]);
+  }, [quiz, user, actions, quizType, navigate, toggleEditModal]);
+
   const getLink = (id, type) => {
     const url = new URL(window.location.href);
     url.pathname = "";
@@ -243,18 +233,28 @@ export default function QuizCreator({
 
   return (
     <div>
-      {showResult && createdQuiz ? (
+      {showResult && (quiz.category === "quiz" ? createdQuiz : createdPoll) ? (
         <div className={styles.results}>
           <h1>
             Congrats! Your {quizType === "quiz" ? "quiz" : "poll"} is published.
           </h1>
-          <p>{getLink(createdQuiz._id, quizType)}</p>
+          <p>
+            {getLink(
+              (quiz.category === "quiz" ? createdQuiz : createdPoll)._id,
+              quizType
+            )}
+          </p>
 
           <Button
-            onClick={() => copyLink(createdQuiz._id, quizType)}
+            onClick={() =>
+              copyLink(
+                (quiz.category === "quiz" ? createdQuiz : createdPoll)._id,
+                quizType
+              )
+            }
             variant="primary"
           >
-            Share quiz
+            Share {quizType === "quiz" ? "quiz" : "poll"}
           </Button>
         </div>
       ) : (
@@ -284,7 +284,6 @@ export default function QuizCreator({
                     )}
                   </Tab>
                 ))}
-
                 {actions !== "update" && quiz.questions.length < 5 && (
                   <button onClick={addQuestion} className={styles.addButton}>
                     <Plus />
