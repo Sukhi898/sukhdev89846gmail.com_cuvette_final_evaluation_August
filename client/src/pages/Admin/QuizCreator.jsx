@@ -49,7 +49,7 @@ export default function QuizCreator({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [createdQuiz, setCreatedQuiz] = useState(null);
-  const [createdPoll, setCreatedPoll] = useState(null); // New state for poll
+  const [createdPoll, setCreatedPoll] = useState(null); 
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { toggleModal } = useContext(ModalContext);
@@ -196,7 +196,7 @@ export default function QuizCreator({
         if (quiz.category === "quiz") {
           setCreatedQuiz(resJson.data.quiz);
         } else {
-          setCreatedPoll(resJson.data.poll); // Use the poll data for polls
+          setCreatedPoll(resJson.data.poll); 
         }
         setShowResult(true);
       }
