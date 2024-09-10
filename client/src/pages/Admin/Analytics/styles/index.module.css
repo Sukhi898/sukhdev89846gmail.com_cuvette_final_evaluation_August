@@ -1,7 +1,11 @@
 .container h1 {
   color: #854cff;
 }
-
+.container1 h1 {
+  display: flex;
+  justify-content: center;
+  color: #5076ff;
+}
 .noData {
   margin-top: 1rem;
   font-size: 1.2rem;
@@ -10,12 +14,14 @@
 
 .table {
   margin-top: 2rem;
-  display: block;
   width: 100%;
+  font-weight: 600;
+  border-spacing: 0px;
+  border-radius: 10px;
 }
 
 .table th {
-  background-color: #854cff;
+  background-color: #5076ff;
   color: white;
   padding: 1rem;
 }
@@ -26,8 +32,8 @@
   text-align: center;
 }
 
-.table tr:nth-child(odd) {
-  background-color: #d6eeee;
+.table tr:nth-child(even) {
+  background-color: #b3c4ff;
 }
 
 .icons {
