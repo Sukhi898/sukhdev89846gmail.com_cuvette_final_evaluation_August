@@ -18,7 +18,9 @@ export default function QuizAnalysis() {
     setIsLoading(true);
 
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}api/quizzes/${quizId}`;
+      const url = `${
+        import.meta.env.VITE_BACKEND_URL
+      }api/quizzes/${quizId}?noImpression=true`;
 
       const res = await fetch(url);
 
