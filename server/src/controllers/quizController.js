@@ -20,15 +20,18 @@ exports.addQuiz = catchAsync(async (req, res, next) => {
 
 exports.getQuiz = catchAsync(async (req, res, next) => {
   const { id } = req.params;
+  const { noImpression } = req.query;
+
   const quiz = await Quiz.findById(id);
-  console.log("sssssssssss");
 
   if (!quiz) {
     return next(new AppError("Quiz does not exist", 404));
   }
 
-  quiz.impressions += 1;
-  await quiz.save();
+  if (!noImpression) {
+    quiz.impressions += 1;
+    await quiz.save();
+  }
 
   res.status(200).json({
     status: "success",
@@ -85,7 +88,6 @@ exports.attemptQuiz = catchAsync(async (req, res, next) => {
   }
 
   results.forEach((el) => {
-    // eslint-disable-next-line eqeqeq
     const question = quiz.questions.find((q) => q._id == el.questionId);
 
     if (!question) {
@@ -94,7 +96,6 @@ exports.attemptQuiz = catchAsync(async (req, res, next) => {
 
     question.attempts += 1;
 
-    // eslint-disable-next-line eqeqeq
     if (el.selectedOption == question.answer) {
       corrects += 1;
       question.corrects += 1;
