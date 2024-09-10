@@ -104,8 +104,20 @@ export default function Analytics() {
     toggleEditModal();
   };
 
+  const handleQuestionClick = (el) => {
+    const updatedQuizzes = quizzes.map((quiz) => {
+      if (quiz._id === el._id) {
+        return { ...quiz, impressions: quiz.impressions + 1 };
+      }
+      return quiz;
+    });
+    setQuizzes(updatedQuizzes);
+
+    navigate(`/${el.category}/${el._id}`);
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container1}>
       <h1>Quiz Analysis</h1>
 
       {isLoading ? (
@@ -118,10 +130,10 @@ export default function Analytics() {
               <th>Quiz name</th>
               <th>Created on</th>
               <th>Impression</th>
-              <th></th>
-              <th></th>
+              <th colspan="2"></th>
             </tr>
           </thead>
+
           <tbody>
             {quizzes?.map((el, index) => (
               <tr key={el._id}>
@@ -147,7 +159,10 @@ export default function Analytics() {
                   />
                 </td>
                 <td>
-                  <Link to={`/${el.category}/${el._id}`}>
+                  <Link
+                    to={`/${el.category}/${el._id}`}
+                    onClick={() => handleQuestionClick(el)}
+                  >
                     Question with analysis
                   </Link>
                 </td>
