@@ -17,9 +17,11 @@ export default function PollAnalysis() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(
-        import.meta.env.VITE_BACKEND_URL + "api/" + "polls/" + pollId
-      );
+      const url = `${
+        import.meta.env.VITE_BACKEND_URL
+      }api/polls/${pollId}?noImpression=true`;
+      const res = await fetch(url);
+
       if (!res.ok) {
         const errJson = await res.json();
         throw new Error(errJson.message ?? "Poll not found");
