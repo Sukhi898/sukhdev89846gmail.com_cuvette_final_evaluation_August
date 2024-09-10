@@ -4,17 +4,21 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.getPoll = catchAsync(async (req, res, next) => {
   const { id } = req.params;
+  const { noImpression } = req.query;
+
   const poll = await Poll.findById(id);
 
   if (!poll) {
     return next(new AppError("Poll not found", 404));
   }
 
-  poll.impressions += 1;
-  poll.save();
+  if (!noImpression) {
+    poll.impressions += 1;
+    await poll.save();
+  }
 
   res.status(200).json({
-    satatus: "success",
+    status: "success",
     data: { poll },
   });
 });
@@ -64,13 +68,16 @@ exports.updatePoll = catchAsync(async (req, res, next) => {
 
   if (!poll) {
     return next(
-      new AppError("Poll not found, or you dont't have permission to edit it")
+      new AppError(
+        "Poll not found, or you don't have permission to edit it",
+        404
+      )
     );
   }
 
   res.status(200).json({
     status: "success",
-    message: { poll },
+    data: { poll },
   });
 });
 
@@ -89,7 +96,6 @@ exports.attemptPoll = catchAsync(async (req, res, next) => {
   }
 
   results.forEach((el) => {
-    // eslint-disable-next-line eqeqeq
     const question = poll.questions.find((q) => q._id == el.questionId);
 
     if (!question) {
@@ -105,7 +111,7 @@ exports.attemptPoll = catchAsync(async (req, res, next) => {
     question.options[el.selectedOption].votes += 1;
   });
 
-  poll.save();
+  await poll.save();
 
   res.status(200).json({
     status: "success",
