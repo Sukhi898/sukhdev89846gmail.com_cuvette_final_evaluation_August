@@ -49,7 +49,7 @@ export default function QuizCreator({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [createdQuiz, setCreatedQuiz] = useState(null);
-  const [createdPoll, setCreatedPoll] = useState(null); 
+  const [createdPoll, setCreatedPoll] = useState(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { toggleModal } = useContext(ModalContext);
@@ -107,6 +107,11 @@ export default function QuizCreator({
   };
 
   const handleOptionsTypeChange = (id, type) => {
+    if (actions === "update") {
+      toast.error("You cannot change the options type while updating.");
+      return;
+    }
+
     setQuiz((draft) => {
       const question = getQuestion(draft, id);
       question.optionsType = type;
@@ -162,7 +167,7 @@ export default function QuizCreator({
     if (actions !== "update") {
       const updatedQuestions = quiz.questions.map((el) => ({
         question: el.question || "",
-        optionsType: el.optionsType,
+        optionsType: el.optionsType, 
         options: el.options || [],
         answer: el.answer || 0,
       }));
@@ -196,12 +201,14 @@ export default function QuizCreator({
         if (quiz.category === "quiz") {
           setCreatedQuiz(resJson.data.quiz);
         } else {
-          setCreatedPoll(resJson.data.poll); 
+          setCreatedPoll(resJson.data.poll);
         }
         setShowResult(true);
       }
       const message =
-        quizType === "quiz"
+        actions === "update"
+          ? "Successfully updated the quiz or poll."
+          : quizType === "quiz"
           ? "Successfully created quiz"
           : "Successfully created poll";
       toast.success(message);
@@ -299,7 +306,9 @@ export default function QuizCreator({
                     question={q}
                     handleQuestionChange={handleQuestionChange}
                     quizType={quizType}
-                    handleOptionsTypeChange={handleOptionsTypeChange}
+                    handleOptionsTypeChange={
+                      actions === "update" ? null : handleOptionsTypeChange
+                    } // Disable if in update mode
                   >
                     <Options
                       actions={actions}
