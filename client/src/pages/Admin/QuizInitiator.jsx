@@ -3,6 +3,7 @@ import { Button, Input } from "../../components/";
 import useInput from "../../hooks/useInput";
 import styles from "./styles/QuizInitiator.module.css";
 import { ModalContext } from "./Naviagtion";
+import { toast } from "react-hot-toast"; // Import toast
 
 export default function QuizInitiator({
   setIsCreatingQuiz,
@@ -14,11 +15,15 @@ export default function QuizInitiator({
   const inputProps = useInput();
 
   const handleProceed = () => {
+    if (!inputProps.value.trim()) {
+      toast.error("Please enter a quiz or poll name");
+      return;
+    }
+
     setIsCreatingQuiz(true);
     setQuizName(inputProps.value);
   };
 
-  // Determine the placeholder based on quizType
   const placeholderText = quizType === "poll" ? "Poll name" : "Quiz name";
 
   return (
