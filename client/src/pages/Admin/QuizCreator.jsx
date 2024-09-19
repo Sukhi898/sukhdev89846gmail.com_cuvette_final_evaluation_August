@@ -142,6 +142,11 @@ export default function QuizCreator({
   };
 
   const handleAnswerChange = (id, index) => {
+    if (actions === "update") {
+      toast.error("You cannot change the correct answer while updating.");
+      return;
+    }
+
     setQuiz((draft) => {
       const question = getQuestion(draft, id);
       question.answer = index;
@@ -163,11 +168,28 @@ export default function QuizCreator({
 
   const createOrUpdateQuiz = useCallback(async () => {
     setIsProcessing(true);
+
+    // Validation for blank questions and options
+    for (const question of quiz.questions) {
+      if (!question.question.trim()) {
+        toast.error("Question cannot be blank.");
+        setIsProcessing(false);
+        return;
+      }
+      for (const option of question.options) {
+        if (!option.text?.trim() && !option.image?.trim()) {
+          toast.error("Options cannot be blank.");
+          setIsProcessing(false);
+          return;
+        }
+      }
+    }
+
     let updatedQuiz = { ...quiz };
     if (actions !== "update") {
       const updatedQuestions = quiz.questions.map((el) => ({
         question: el.question || "",
-        optionsType: el.optionsType, 
+        optionsType: el.optionsType,
         options: el.options || [],
         answer: el.answer || 0,
       }));
