@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
+ import { useCallback, useContext, useEffect, useState } from "react";
+ import { Icon } from "@iconify/react";
 import { AuthContext } from "../../../store/authContext";
 import copyLink from "../../../utils/copyLink";
 import formatDate from "../../../utils/formatDate";
@@ -44,7 +44,8 @@ export default function Trendings() {
     const fetchData = async () => {
       const data = await fetchList();
       if (isMounted && data) {
-        setList(data.data.docs);
+        const filteredData = data.data.docs.filter((el) => el.impressions > 10);
+        setList(filteredData);
       }
       setLoading(false);
     };
