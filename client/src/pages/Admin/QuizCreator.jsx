@@ -169,7 +169,6 @@ export default function QuizCreator({
   const createOrUpdateQuiz = useCallback(async () => {
     setIsProcessing(true);
 
-    // Validation for blank questions and options
     for (const question of quiz.questions) {
       if (!question.question.trim()) {
         toast.error("Question cannot be blank.");
@@ -214,12 +213,12 @@ export default function QuizCreator({
       });
       if (!res.ok) {
         const errJSON = await res.json();
-        console.log(errJSON);
+        // console.log(errJSON);
         throw new Error(errJSON.message);
       }
       if (actions !== "update") {
         const resJson = await res.json();
-        console.log(resJson);
+        // console.log(resJson);
         if (quiz.category === "quiz") {
           setCreatedQuiz(resJson.data.quiz);
         } else {
@@ -328,9 +327,7 @@ export default function QuizCreator({
                     question={q}
                     handleQuestionChange={handleQuestionChange}
                     quizType={quizType}
-                    handleOptionsTypeChange={
-                      actions === "update" ? null : handleOptionsTypeChange
-                    } // Disable if in update mode
+                    handleOptionsTypeChange={handleOptionsTypeChange} 
                   >
                     <Options
                       actions={actions}
