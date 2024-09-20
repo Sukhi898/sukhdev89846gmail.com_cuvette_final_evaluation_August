@@ -51,3 +51,11 @@
 .date {
   color: var(--primary-color);
 }
+.p {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-content: center;
+  place-items: center;
+  margin-top: 10%;
+}
