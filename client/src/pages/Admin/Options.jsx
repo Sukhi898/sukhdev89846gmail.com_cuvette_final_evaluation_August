@@ -8,6 +8,7 @@ export default function Options({
   handleAnswerChange,
   deleteOption,
   handleOptionChange,
+  handleOptionsTypeChange, // Accept the prop
   actions,
 }) {
   return (
@@ -19,7 +20,7 @@ export default function Options({
               type="radio"
               name="options"
               onChange={() => handleAnswerChange(question._id, index)}
-              checked={question.answer == index}
+              checked={question.answer === index}
               id={index}
             />
             <label htmlFor={index}>
@@ -42,7 +43,7 @@ export default function Options({
                 />
               )}
             </label>
-            {index >= 2 && (
+            {index >= 2 && actions !== "update" && (
               <Icon
                 onClick={() => deleteOption(question._id, index)}
                 style={{
