@@ -19,9 +19,9 @@
 
 .selectedTab {
   /* composes: tab; */
-  color: black;
+  color: white;
   border-radius: 100%;
-  background: #ffffff;
+  background: var(--primary-color);
   height: 85%;
   padding: 16px;
   width: 50px;
